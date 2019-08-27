@@ -1,31 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_template/presentation/main/main_view.dart';
+import 'package:flutter_app_template/presentation/main/home_view.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget{
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomePage extends StatefulWidget{
+  HomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> implements MainView {
+class _HomePageState extends State<HomePage> implements MainView {
   int _counter = 0;
 
   @override
