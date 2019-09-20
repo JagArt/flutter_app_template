@@ -1,12 +1,17 @@
+import 'package:flutter_app_template/domain/gateways/repositories/rows_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class GetRowsInteractor {
-  Observable<String> get();
+  Observable<List<String>> get();
 }
 
 class GetRowsInteractorImpl implements GetRowsInteractor {
+  RowsRepository rowsRepository;
+
+  GetRowsInteractorImpl(this.rowsRepository);
+
   @override
-  Observable<String> get() {
-    return Observable.fromIterable(List<String>.from(['a', 'b', 'c']));
+  Observable<List<String>> get() {
+    return rowsRepository.getWithUpdates();
   }
 }

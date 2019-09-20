@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_template/presentation/di/injection.dart';
 import 'home_view.dart';
 
 import 'home_presenter.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
+  final Provider provider;
   final String title;
 
+  HomePage({Key key, this.title, this.provider}) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(provider);
 }
 
 class _HomePageState extends State<HomePage> implements HomeView {
   HomeViewState _state = HomeViewState.initial;
   HomePresenter _presenter;
 
-  _HomePageState() {
-    _presenter = HomePresenterImpl(this);
+  _HomePageState(Provider provider) {
+    _presenter = HomePresenterImpl(
+        this, provider.getRowsInteractor(), provider.addRowInteractor());
   }
 
   @override
@@ -35,23 +38,18 @@ class _HomePageState extends State<HomePage> implements HomeView {
 
   @override
   Widget build(BuildContext context) {
+    var list = _state.items
+        .map((item) => ListTile(
+              title: Text(item),
+            ))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '${_state.quantity}',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
+      body: ListView(
+        children: list,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _presenter.onAddClicked,
