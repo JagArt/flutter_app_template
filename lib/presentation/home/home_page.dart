@@ -1,44 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_template/presentation/base/mvp_page.dart';
 import 'package:flutter_app_template/presentation/di/injection.dart';
 import 'home_view.dart';
 
 import 'home_presenter.dart';
 
-class HomePage extends StatefulWidget {
-  final Provider provider;
-  final String title;
-
-  HomePage({Key key, this.title, this.provider}) : super(key: key);
+class HomePage extends MvpPage<HomeViewState, HomePresenter> {
+  HomePage({Key key, String title, Provider provider})
+      : super(key: key, title: title, provider: provider);
 
   @override
-  _HomePageState createState() => _HomePageState(provider);
+  _HomePageState createPageState(
+          Provider provider) {
+    return _HomePageState(provider, HomeViewState.initial);
+  }
 }
 
-class _HomePageState extends State<HomePage> implements HomeView {
-  HomeViewState _state = HomeViewState.initial;
-  HomePresenter _presenter;
-
-  _HomePageState(Provider provider) {
-    _presenter = HomePresenterImpl(
-        this, provider.getRowsInteractor(), provider.addRowInteractor());
-  }
+class _HomePageState extends MvpPageState<HomeViewState, HomePresenter>
+    implements HomeView {
+  _HomePageState(Provider provider, HomeViewState state) : super(provider, state);
 
   @override
-  void renderState(HomeViewState state) {
-    setState(() {
-      _state = state;
-    });
-  }
-
-  @override
-  void dispose() {
-    _presenter.onDestroy();
-    super.dispose();
-  }
+  HomePresenter createPresenter(Provider provider) => HomePresenterImpl(
+      this, provider.getRowsInteractor(), provider.addRowInteractor());
 
   @override
   Widget build(BuildContext context) {
-    var list = _state.items
+    var list = state.items
         .map((item) => ListTile(
               title: Text(item),
             ))
@@ -52,10 +40,10 @@ class _HomePageState extends State<HomePage> implements HomeView {
         children: list,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _presenter.onAddClicked,
+        onPressed: presenter.onAddClicked,
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

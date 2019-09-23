@@ -1,5 +1,7 @@
-abstract class HomeView {
-  void renderState(HomeViewState state);
+import 'package:flutter_app_template/presentation/base/mvp_view.dart';
+
+abstract class HomeView implements MvpView<HomeViewState> {
+
 }
 
 class HomeViewState {

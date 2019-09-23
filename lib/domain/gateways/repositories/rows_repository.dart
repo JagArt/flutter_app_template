@@ -11,6 +11,7 @@ abstract class RowsRepository {
 class RowsRepositoryImpl implements RowsRepository {
   final subject = BehaviorSubject<bool>();
 
+  // TODO: replace memory repository with real data store
   List<String> _cache = <String>[];
 
   @override
